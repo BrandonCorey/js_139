@@ -109,3 +109,54 @@ console.log(Person); ReferenceError: Cannot access 'Person' before initializatio
 ```javascript
 console.log(y); // ReferenceError: y is not defined
 ```
+
+## Strict Mode ##
+Makes 3 major changes to JavaScript semantics
+- Eliminindates certain silent errors
+- Eliminates certain code that can cause optimization issues
+- Prevents using names that may conflict with future versions of JS
+
+### Benefits ###
+- Mitigates bugs
+- Makes debugging easier
+- Makes code faster
+- Helps prevent conflicts with future changes to JS
+
+### More Specific ###
+- Cannot create global variables implicitly (by forgetting a variable declaration)
+- Functions use `undefined` as their implicit context, not the `global` object
+- Forgetting to use `this` raises an error
+- Leading zeros on numbers is illegal
+- Automatically gets enabled inside of ES6 classes
+- Can be enabled globally or within the scope of a function (has to be at the top of file/function)
+
+### When to use ###
+- When creating new programs or functions from scratch
+  - This includes adding new functions to an exisitng codebase
+### When not to use ###
+- Do not use strict mode when modifying code that was not written with strict mode enabled as it may break something unexpectedly
+
+```javascript
+"use strict"
+x = 5; // ReferenceError: x is not defined
+```
+```javascript
+let person = {
+  name: 'brandon',
+  greet() {
+    //console.log(name); // ReferenceError: name is not defined
+  },
+  
+  greetAgain() {
+    console.log(this.name);
+  }
+}
+
+person.greet();
+
+let greet = person.greetAgain();
+greet(); // TypeError: greet is not a function
+```
+```javascript
+let x = 01234; // SyntaxError: Octal literals are not allowed in strict mode
+```
