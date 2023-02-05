@@ -144,7 +144,7 @@ x = 5; // ReferenceError: x is not defined
 let person = {
   name: 'brandon',
   greet() {
-    //console.log(name); // ReferenceError: name is not defined
+    console.log(name); // ReferenceError: name is not defined
   },
   
   greetAgain() {
