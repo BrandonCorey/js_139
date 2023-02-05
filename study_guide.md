@@ -74,6 +74,34 @@ function hello() {
 
 hello();
 ```
-### Temporarl Deadzone ###
+```javascript
+// Same name declarations
+var hello = 'hello';
+var hello = () => return 1 + 1;
+function hello() {
+  console.log('hello');
+}
+
+
+hello(); // 2
+```
+```javascript
+// Hoisted version
+function hello() {
+  console.log('hello');
+}
+hello = 'hello';
+hello = () => 1 + 1;
+hello() // 2;
+```
+### Temporal Deadzone ###
 All variables declared with `let`, `const` or `class` are said to be in the temporal deadzone (TDZ) _after_ creation and _before_ initialization
 - At this point, the engine is aware of the variables and their scope, but they are in a state of `not defined`, and cannot be accessed
+
+```javascript
+console.log(x); // ReferenceError: Cannot access 'x' before initialization (currently in the TDZ)
+let x = 5;
+```
+```javascript
+console.log(y); // ReferenceError: y is not defined
+```
