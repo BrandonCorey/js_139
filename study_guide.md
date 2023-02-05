@@ -38,18 +38,38 @@ A mental model to describe how JS finds all declarations and stores references t
 - Block scoped declarations like `let`, `const` and `class` also have their declarations hoisted (references to variables recorded in creation phase)
   - Function expressions and class declaration/expressions have their **names** hoisted (references to variables), but not their definitions
 ```javascript
+// Source Code
+hello();
+
 function hello() {
-  let world = world();
-  console.log(hello + ' ' + world);
+  let world = worldFunc(); 
+  console.log(hello + ' ' + world); // 'undefined world'
   
   if (true) {
     var hello = 'hello';
   }
-  console.log(hello + ' ' + word);
+  console.log(hello + ' ' + world); // 'hello world'
 }
 
-function world() {
+function worldFunc() {
   return 'world';
+}
+```
+```javascript
+// "Hoisted" version
+function worldFunc() {
+  return 'world';
+}
+
+function hello() {
+  var hello;
+  let world = worldFunc(); 
+  console.log(hello + ' ' + world); // 'undefined world'
+  
+  if (true) {
+    hello = 'hello';
+  }
+  console.log(hello + ' ' + world); // 'hello world'
 }
 
 hello();
