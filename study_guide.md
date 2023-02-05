@@ -103,5 +103,9 @@ console.log(x); // ReferenceError: Cannot access 'x' before initialization (curr
 let x = 5;
 ```
 ```javascript
+class Person {}
+console.log(Person); ReferenceError: Cannot access 'Person' before initialization (currently in the TDZ)
+```
+```javascript
 console.log(y); // ReferenceError: y is not defined
 ```
