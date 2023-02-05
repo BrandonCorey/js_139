@@ -138,9 +138,11 @@ Makes 3 major changes to JavaScript semantics
 
 ```javascript
 "use strict"
+// Implicit global variables
 x = 5; // ReferenceError: x is not defined
 ```
 ```javascript
+// Forgetting to use 'this' as well as implicit execution context
 let person = {
   name: 'brandon',
   greet() {
@@ -158,5 +160,6 @@ let greet = person.greetAgain();
 greet(); // TypeError: greet is not a function
 ```
 ```javascript
+// Use of octal literals
 let x = 01234; // SyntaxError: Octal literals are not allowed in strict mode
 ```
