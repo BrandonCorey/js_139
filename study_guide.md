@@ -241,9 +241,9 @@ Private Data is data that is impossible to access from outside the scope where t
   - Abstracts away implementation details from other developers
 
 Closure in below example
-- Our returned object'S method `resetID` closes over `generateID`
+- Our returned object'S method `setID` closes over `generateID`
 - This allows us to access the `generateID` function without exposing it to the public interface of our account instances
-- The only way to interface with `generateID` is with the `resetID` instance method
+- The only way to interface with `generateID` is with the `setID` instance method
 ```javascript
 const createAccount = (email, password) => {
   const generateID = () => {
@@ -260,8 +260,7 @@ const createAccount = (email, password) => {
   return {
     email,
     password,
-    userID: null,
-    resetID() {
+    setID() {
       this.userID = generateID();
     }
   }
@@ -270,7 +269,11 @@ const createAccount = (email, password) => {
 ## IFFEs ##
 An immediately invoked function expression is a function that can be defined and invoked simulataneously using specific syntax
 - Can wrap functions in parenthesis and pass an argument immediately following the definition
-- Can use IFFEs to create private scope
+- Can use IFFEs to create private scope and private data
+  - Can be used to generate an object with fewer lines of code
+
+### Private Scope ###
+
 ```javascript
 // Using IIFE to create a function that immediately invokes and returns another function
 const print = (() => {
@@ -280,8 +283,25 @@ const print = (() => {
 print('hello world'); // '=> hello world'
 ```
 ```javascript
-// Using IIFE to create private scoped
-console.log(((num) => {
-  return num ** 2;
-})(5)); // '25'
+// Using IIFE to create private scope for `arr` and `total`
+(() => {
+  let arr = [1, 2, 3, 4, 5];
+  let total = arr.reduce((sum, val)) => sum + val);
+  return total;
+})();
+```
+```javascript
+// Creating private data with IIFE
+const Dice = (() => {
+  const generateNum = () => {
+    return Math.floor(Math.random() * 5) + 1
+  }
+  
+  return class {
+    static roll() {
+      return generateNum();
+    }
+    constructor() {}
+  }
+})();
 ```
