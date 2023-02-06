@@ -371,21 +371,23 @@ const destruct = ({ name, age, greet }) => {
 ```
 ### Array destructuring ###
 - Arrays must be destructured based on the order of their elements
+- Can skip elements using commas
 ```javascript
-let arr = [1, 2, 3];
+let arr = [1, 2, 3, 4, 5];
 ```
 ```javascript
 // Standard JS
 let one = arr[0];
 let two = arr[1];
-let three = arr[2];
+let five = arr[4];
 ```
 ```javascript
 // Array destructuring
-let [ one, two, three ] = arr;
+let [ one, two, , , five ] = arr;
 ```
 ```javascript
-const destruct = ([ one, two, three ]) = {
+// Destructuring using parameters
+const destruct = ([ one, two, , , five ]) = {
   // more code here...
 }
 ```
