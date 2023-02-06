@@ -208,3 +208,25 @@ countByFive(); // 15
 
 countByFiveAgain(); // 20
 ```
+### Partial Function application ###
+The use of one function to apply some arguments to another function as to reduce the total number of arguments required to pass to the second function
+- This allows us to pass functions as arguments to other functions that may want to call our function with less arguments than our function takes
+- We can use PFA to pass a function that has some of its arguments already applied
+- It is not PFA if the total number of arguments is not reduced in the returned function
+
+Closure in below example:
+- We close over `addAmount`, allowing us to invoke the function once it is out of scope with `add(10)`
+- Our returned `addAmount` invocation closes over the `initial` parameter passed to `initValue`, allowing us to use it as the init argument for `addAmount`
+```javascript
+const initValue = (initial) => {
+  const addAmount = (init, add) => {
+    return init + add;
+  }
+
+  return (add) => addAmount(initial, add);
+}
+
+const add = initValue(5);
+add(10); // 15
+add(15); // 20
+```
