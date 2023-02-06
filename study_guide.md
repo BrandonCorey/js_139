@@ -393,10 +393,20 @@ const destruct = ([ one, two, , , five ]) = {
 ```
 
 ### Spread Syntax ###
-Uses `...` to spread elements of an iterable into seperate elements (can visually think of them as comma seperated elements)
+Uses `...` to spread elements of an iterable to seperate items (can visually think of them as comma seperated elements)
+- Can be used on strings, arrays, or objects
 ```javascript
 let arr = [1, 2, 3, 4, 5];
+let obj = {name: 'brandon', age: 24};
 const sum = (array) => array.reduce(total, val) => total + val);
+```
+```javascript
+// Standard JS
+let arrCopy = arr.slice(); // Copy of arr
+let arrAdditional = arr.slice().concat(([6, 7]); // [ 1, 2, 3, 4, 5, 6, 7 ]
+let largest = Math.max.apply(null, arr); // 5
+sum.apply(null, arr); // 15
+let objCopy = Object.assign({}, obj);
 ```
 ```javascript
 // Uses of spread syntax
@@ -404,11 +414,29 @@ let arrCopy = [...arr] // Copy of arr
 let arrAdditional = [...arr, 6, 7]; // [ 1, 2, 3, 4, 5, 6, 7 ]
 let largest = Math.max(...arr); // 5
 sum(...arr); // 15
+let objCopy = {...obj};
+```
+### Rest syntax ###
+Collects multiple items into an array or object (opposite of spread syntax)
+```javascript
+let arr = [1, 2, 3, 4, 5];
+let obj = {name: 'brandon', age: 24, occupation: 'analyst'};
 ```
 ```javascript
-// Standard JS
-let arrCopy = arr.slice(); // Copy of arr
-let arrAdditional = arr.slice().concat([6, 7]); // [ 1, 2, 3, 4, 5, 6, 7 ]
-let largest = Math.max.apply(null, arr); // 5
-sum.apply(null, arr); // 15
+// Using with declarations
+let [ one, two, three, ...otherNums ] = arr;  // [ 1 ] [ 2 ] [ 3, 4, 5 ]
+let { name, ...rest } = obj; // { name: 'brandon' } { age: 24, occupation: 'analyst' }
+```
+```javascript
+// Using with functions to accept variable number of arguments
+const sum = (...args) => {
+  return args.reudce((total, val) => total + val);
+}
+```
+```
+// Old way accpeting variable number of arguments using Arguments object
+const sum = () => {
+  let args = Array.from(arguments);
+  return args.reudce((total, val) => total + val);
+}
 ```
