@@ -233,16 +233,3 @@ const makeSorter = (callback) => {
 const sortAsc = makeSorter((a, b) => a - b);
 sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
 ```
-
-**The following is not PFA as we do not reduce the number of required arguments for the returned function**
-```javascript
-// Not PFA
-const makeSorter = (callback) => {
-  return (array) => {
-    return array.slice().sort(callback);
-  }
-}
-
-const sortAsc = makeSorter((a, b) => a - b);
-sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
-```
