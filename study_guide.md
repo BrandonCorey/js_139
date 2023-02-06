@@ -233,3 +233,37 @@ const makeSorter = (callback) => {
 const sortAsc = makeSorter((a, b) => a - b);
 sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
 ```
+### Private Data ###
+Private Data is data that is impossible to access from outside the scope where the data is defined
+- Closures allow us to store private data that cannot be accessed by anything or anywhere outside the function that created the closure
+- Private data is desirable as it forces users to use the methods we provide to interract with that data instead of interracting with it directly
+  - This helps with data integrity
+  - Abstracts away implementation details from other developers
+
+Closure in below example
+- Our returned object'S method `resetID` closes over `generateID`
+- This allows us to access the `generateID` function without exposing it to the public interface of our account instances
+- The only way to interface with `generateID` is with the `resetID` instance method
+```javascript
+const createAccount = (email, password) => {
+  const generateID = () => {
+    const LENGTH = 8;
+    const CHARS = 'abcdef0123456789';
+    let id = '';
+    for (let count = 0; count < LENGTH; count++) {
+      let idx = Math.floor(Math.random() * CHARS.length);
+      id += CHARS[idx];
+    }
+    return id;
+  }
+  
+  return {
+    email,
+    password,
+    userID: null,
+    resetID() {
+      this.ID = generateID();
+    }
+  }
+}
+```
