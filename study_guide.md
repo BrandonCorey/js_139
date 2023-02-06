@@ -187,7 +187,6 @@ const countByFiveAgain = makeCountByFive();
 countByFiveAgain(); // 5
 ```
 ```javascript
-```javascript
 // One counter and one closure created due to a single invocation of makeCounter
 const makeCountByFive = () => {
   let count = 0;
