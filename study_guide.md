@@ -262,7 +262,7 @@ const createAccount = (email, password) => {
     password,
     userID: null,
     resetID() {
-      this.ID = generateID();
+      this.userID = generateID();
     }
   }
 }
