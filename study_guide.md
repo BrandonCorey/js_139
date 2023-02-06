@@ -163,3 +163,52 @@ greet(); // TypeError: greet is not a function
 // Use of octal literals
 let x = 01234; // SyntaxError: Octal literals are not allowed in strict mode
 ```
+## Closure ##
+The combination of a function and the lexical environment within which that function was defined
+- Closures can be thought of as an object attached to a function that contains references to all **variables** in scope at the point of definition
+- The closure is one place the JS engine looks for variables (engine looks there after local scope), and can use the references to these variables to find values
+- Because closures are attached to the function object, variables referenced within them are accessible even they are out of scope for the invocation
+  - Note: A new closure and variables referenced in them are recreated every time the function they live in is invoked (if they were declared in a function)
+```javascript
+// New counters and closures created on each invocation of makeCountByFive
+const makeCountByFive = () => {
+  let count = 0;
+  return () => {
+    return count += 5;
+  }
+}
+
+const countByFive = makeCountByFive();
+countByFive(); // 5
+countByFive(); // 10
+countByFive(); // 15
+
+const countByFiveAgain = makeCountByFive();
+countByFiveAgain(); // 5
+```
+```javascript
+// Same counter and closure
+
+```
+```javascript
+// One counter and one closure created due to a single invocation of makeCounter
+const makeCountByFive = () => {
+  let count = 0;
+  const countByFive = () => {
+    return count += 5;
+  };
+
+  const countByFiveAgain = () => {
+    return count += 5;
+  }
+
+  return [countByFive, countByFiveAgain]
+}
+
+const [countByFive, countByFiveAgain] = makeCountByFive();
+countByFive(); // 5
+countByFive(); // 10
+countByFive(); // 15
+
+countByFiveAgain(); // 20
+```
