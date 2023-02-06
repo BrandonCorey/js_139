@@ -356,7 +356,7 @@ const person = {
 ```javascript
 // Standard JS
 let age = person.age;
-let name = person.age;
+let name = person.name;
 let greet = person.greet;
 ```
 ```javascript
@@ -365,7 +365,27 @@ let { age, greet, name } = person;
 ```
 ```javascript
 // Destructing with parameters
-const destructure = ({ name, age, greet }) => {
+const destruct = ({ name, age, greet }) => {
   // more code here....
+}
+```
+### Array destructuring ###
+- Arrays must be destructured based on the order of their elements
+```javascript
+let arr = [1, 2, 3];
+```
+```javascript
+// Standard JS
+let one = arr[0];
+let two = arr[1];
+let three = arr[2];
+```
+```javascript
+// Array destructuring
+let [ one, two, three ] = arr;
+```
+```javascript
+const destruct = ([ one, two, three ]) = {
+  // more code here...
 }
 ```
