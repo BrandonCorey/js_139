@@ -291,7 +291,7 @@ print('hello world'); // '=> hello world'
 })();
 ```
 ```javascript
-// Creating private data with IIFE
+// Creating private data with IIFE. `roll` closer over `generateNum`
 const Dice = (() => {
   const generateNum = () => {
     return Math.floor(Math.random() * 5) + 1
