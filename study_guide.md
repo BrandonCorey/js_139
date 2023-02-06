@@ -391,3 +391,24 @@ const destruct = ([ one, two, , , five ]) = {
   // more code here...
 }
 ```
+
+### Spread Syntax ###
+Uses `...` to spread elements of an iterable into seperate elements (can visually think of them as comma seperated elements)
+```javascript
+let arr = [1, 2, 3, 4, 5];
+const sum = (array) => array.reduce(total, val) => total + val);
+```
+```javascript
+// Uses of spread syntax
+let arrCopy = [...arr] // Copy of arr
+let arrAdditional = [...arr, 6, 7]; // [ 1, 2, 3, 4, 5, 6, 7 ]
+let largest = Math.max(...arr); // 5
+sum(...arr); // 15
+```
+```javascript
+// Standard JS
+let arrCopy = arr.slice(); // Copy of arr
+let arrAdditional = arr.slice().concat([6, 7]); // [ 1, 2, 3, 4, 5, 6, 7 ]
+let largest = Math.max.apply(null, arr); // 5
+sum.apply(null, arr); // 15
+```
