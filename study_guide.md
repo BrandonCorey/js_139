@@ -433,7 +433,7 @@ const sum = (...args) => {
   return args.reudce((total, val) => total + val);
 }
 ```
-```
+```javascript
 // Old way accpeting variable number of arguments using Arguments object
 const sum = () => {
   let args = Array.from(arguments);
