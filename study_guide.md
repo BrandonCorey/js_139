@@ -235,7 +235,7 @@ sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
 ```
 ### Private Data ###
 Private Data is data that is impossible to access from outside the scope where the data is defined
-- Closures allow us to store private data that cannot be accessed by anything or anywhere outside the function that created the closure
+- Closures allow us to store private data that cannot be accessed  outside of the function that created the closure
 - Private data is desirable as it forces users to use the methods we provide to interract with that data instead of interracting with it directly
   - This helps with data integrity
   - Abstracts away implementation details from other developers
@@ -266,4 +266,22 @@ const createAccount = (email, password) => {
     }
   }
 }
+```
+## IFFEs ##
+An immediately invoked function expression is a function that can be defined and invoked simulataneously using specific syntax
+- Can wrap functions in parenthesis and pass an argument immediately following the definition
+- Can use IFFEs to create private scope
+```javascript
+// Using IIFE to create a function that immediately invokes and returns another function
+const print = (() => {
+  return (str) => '=> ' + str;
+})();
+
+print('hello world'); // '=> hello world'
+```
+```javascript
+// Using IIFE to create private scoped
+console.log(((num) => {
+  return num ** 2;
+})(5)); // '25'
 ```
