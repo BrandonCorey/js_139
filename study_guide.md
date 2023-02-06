@@ -314,3 +314,30 @@ const Dice = (() => {
   }
 })();
 ```
+## Shorthand Notation ##
+- Concise property initializers
+- Concise Methods
+```javascript
+// Standard JS
+const createPerson = (name, age) => {
+  return {
+    name: name,
+    age: age,
+    greet: function() {
+      console.log(`Hi, I am ${name} and I am ${age} years old`);
+    } 
+  }
+}
+```
+```javascript
+// Shorthand
+const createPerson = (name, age) => {
+  return {
+    name,
+    age,
+    greet() {
+      console.log(`Hi, I am ${name} and I am ${age} years old`);
+    } 
+  }
+}
+```
