@@ -272,8 +272,7 @@ An immediately invoked function expression is a function that can be defined and
 - Can use IFFEs to create private scope and private data
   - Can be used to generate an object with fewer lines of code
 
-### Private Scope ###
-
+### Basic syntax ###
 ```javascript
 // Using IIFE to create a function that immediately invokes and returns another function
 const print = (() => {
@@ -282,6 +281,7 @@ const print = (() => {
 
 print('hello world'); // '=> hello world'
 ```
+### Private Scope ###
 ```javascript
 // Using IIFE to create private scope for `arr` and `total`
 (() => {
@@ -290,6 +290,15 @@ print('hello world'); // '=> hello world'
   return total;
 })();
 ```
+```javascript
+// Can also use a block to create private scope
+{
+  let arr = [1, 2, 3, 4, 5];
+  let total = arr.reduce((sum, val)) => sum + val);
+  return total;
+}
+```
+### Creating private data ###
 ```javascript
 // Creating private data with IIFE. `roll` closer over `generateNum`
 const Dice = (() => {
