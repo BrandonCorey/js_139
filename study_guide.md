@@ -212,21 +212,37 @@ countByFiveAgain(); // 20
 The use of one function to apply some arguments to another function as to reduce the total number of arguments required to pass to the second function
 - This allows us to pass functions as arguments to other functions that may want to call our function with less arguments than our function takes
 - We can use PFA to pass a function that has some of its arguments already applied
-- It is not PFA if the total number of arguments is not reduced in the returned function
+- **It is not PFA** if the total number of arguments is not reduced in the returned function
+- **It is not PFA** if we hard-bind the first argument of the returned function instead of using closure
 
 Closure in below example:
-- We close over `addAmount`, allowing us to invoke the function once it is out of scope with `add(10)`
-- Our returned `addAmount` invocation closes over the `initial` parameter passed to `initValue`, allowing us to use it as the init argument for `addAmount`
+- Returned function closes over `callback` parameter in outer function, giving us access to the callback in the returned function even when `callback` is out of scope
+- Returned function also closes over `sortCopy` function, allowing us to return its invocation from our inner function even when it is out of scope
 ```javascript
-const initValue = (initial) => {
-  const addAmount = (init, add) => {
-    return init + add;
+// Example of PFA
+const makeSorter = (callback) => {
+  const sortCopy = (func, array) => {
+    return array.slice().sort(func);
   }
 
-  return (add) => addAmount(initial, add);
+  return (array) => {
+    return sortCopy(callback, array)
+  }
 }
 
-const add = initValue(5);
-add(10); // 15
-add(15); // 20
+const sortAsc = makeSorter((a, b) => a - b);
+sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
+```
+
+**The following is not PFA as we do not reduce the number of required arguments for the returned function**
+```javascript
+// Not PFA
+const makeSorter = (callback) => {
+  return (array) => {
+    return array.slice().sort(callback);
+  }
+}
+
+const sortAsc = makeSorter((a, b) => a - b);
+sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
 ```
