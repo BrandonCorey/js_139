@@ -315,8 +315,7 @@ const Dice = (() => {
 })();
 ```
 ## Shorthand Notation ##
-- Concise property initializers
-- Concise Methods
+### Concise property initializers and concise methods ###
 ```javascript
 // Standard JS
 const createPerson = (name, age) => {
@@ -339,5 +338,34 @@ const createPerson = (name, age) => {
       console.log(`Hi, I am ${name} and I am ${age} years old`);
     } 
   }
+}
+```
+### Object destructuring ###
+- Unlike array destructuring, objects are destructured using property names, not the order in which they appear
+- Can change the name using `{ prop: newProp }` syntax
+- Can also destructure within function definitions using parameters
+```javascript
+const person = {
+  name: 'Brandon Corey',
+  age: 24,
+  greet() {
+    console.log(`Hi, I am ${name} and I am ${age} years old`);
+  }
+}
+```
+```javascript
+// Standard JS
+let age = person.age;
+let name = person.age;
+let greet = person.greet;
+```
+```javascript
+// Destructuring
+let { age, greet, name } = person;
+```
+```javascript
+// Destructing with parameters
+const destructure = ({ name, age, greet }) => {
+  // more code here....
 }
 ```
