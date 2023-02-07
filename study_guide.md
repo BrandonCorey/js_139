@@ -440,3 +440,43 @@ const sum = () => {
   return args.reudce((total, val) => total + val);
 }
 ```
+
+## Modules ##
+A module is just a seperate file used to store code
+
+### Benefits ###
+- Each module can work work on a spereate problem (seperation of concerns)
+- Each module code is less entangled with the rest of the program and can be used more easily
+  - It is easier to export a module than to cut/copy and paste code from a file
+- It is easier to work with private data since each module will have its own scope
+  - Only things explicitly exported from the module will be accessible to other modules
+
+## CommonJS modules ##
+Native support for modules offered by **Node**
+- Uses `require` function to import a module
+  - NPM modules only need to pass the name of the module to `require`
+  - user-created modules must pass the relative file path or absolute file path to module
+    - The name exported becomes the name available to be imported to another program
+- Browsers do not support commonJS modules are they are synchronous and too slow for the browser
+
+### CommonJS syntax ###
+- `require` - Used to import a module by passing argument to it
+- `module` - An object that respresents the current module
+- `module.exports` - A property that points to things to be exported (is an object by default, but can be reassigned to anything)
+- `module.__dirname` - Absolute pathname of the directory that contains the module
+- `module.__filename` - Absolute pathname of the module file name
+
+```javascript
+// Exporting one function from a module
+const sum = (arr) arr.reduce((total, val) => total + val);
+
+module.exports = sum;
+```
+```javascript
+// Exporting two functions and a variable
+const pi = 3.14159265;
+const sum = (arr) arr.reduce((total, val) => total + val);
+const multiply = (arr) arr.reduce((total, val) => total * val);
+
+module.exports = {sum, multiply, pi}
+```
