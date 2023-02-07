@@ -475,8 +475,8 @@ module.exports = sum;
 ```javascript
 // Exporting two functions and a variable
 const pi = 3.14159265;
-const sum = (arr) arr.reduce((total, val) => total + val);
-const multiply = (arr) arr.reduce((total, val) => total * val);
+const sum = (arr) => arr.reduce((total, val) => total + val);
+const multiply = (arr) => arr.reduce((total, val) => total * val);
 
 module.exports = {sum, multiply, pi}
 ```
@@ -487,7 +487,7 @@ Errors messages that are thrown when JavaScript cannot recover from an error
 - "error" message however, does not always mean exception
   - Could be something as simple as a `console.log`
 
-## Throwing excpetions ##
+### Throwing excpetions ###
 - Most we've seen so far are raised internally (i.e ReferenceError, SyntaxError, TypeError);
 - They can also be defined manually
 - An exception can have any value, including primitive, or object (commonly, `Error` object or instance of `Error`)
@@ -505,7 +505,7 @@ throw 'banana' // Raises exception with value banana
 throw Error('this is an error'); Creates instance of error with a message property and throws it
 throw new Error('this is an error'); Creates instance of error with a message property and throws it
 ```
-## Catching exceptions ##
+### Catching exceptions ###
 We can use the `try` and `catch` statements to resolve excpetions that are raised
 - This is a good use case of explicitly created a new error class like above
 - You generally want to know exactly the type of error that may be raised
@@ -513,7 +513,7 @@ We can use the `try` and `catch` statements to resolve excpetions that are raise
   - If it finds one, the code in the catch block will be executed
   - IF the catch throw an error, the process will repeat
 ```javascript
-const loadFile = (filePath) => /code here/; 
+const loadFile = (filePath) => /*code here*/; 
 try {
   loadFile('./testFile');
 } catch (error) {
@@ -524,7 +524,7 @@ try {
   }
 }
 ```
-## Exceptions should be used for exceptional behavior ##
+### Exceptions should be used for exceptional behavior ###
 - Do not throw exceptions for flow control type issues
   - The divide by 0 is an exmaple of when it might not be needed
   - Any type of input validation that can be controlled probably should not raise an exception
@@ -536,3 +536,107 @@ try {
 - Only handle exceptions you believe can be recovered from successfully
   - Only handle if you're confident the handler will not throw another expceiton itself
   - handler should do as little as possible (ignore exception, return error value, log a message, throw another exception)
+
+## Pure Functions ##
+Pure functions are functions that do not have side effects, and return a useful value that is not influenced by code outside the function
+- Useful value means a value that means something to the calling code 
+- Technically, functions themselves don't have side effects, invocations do. However, we still refer to functions themselves as having side effects
+- If an invocation has side effects when *used as intended*, we say the function has side effects
+  - Used as intended:
+    - passed the expected arguments
+    - Invoked after requesite preparations (such as after opening a connection to a remote server)
+
+### Side effects ###
+A side effect occurs if a function:
+- Reassigns a non-local variable
+- Mutates an object referenced by a non-local variable
+- Reads or writes to any data entities (files, databases etc.)
+  - This also includes accessing system hardware (mouse, trackpad, clock, random number generator, camera, speakers)
+  - This means functions like `Math.random` and `new Date` produce side effects
+- Raises an exception
+- Calls another function that has side effects
+
+### Always returns same value based on same arguments ###
+- This second requirement states that a functions return value is soley dependent on its arguments, and not outside factors
+```javascript
+const sum = (a, b) => a + b; // Pure
+```
+```javascript
+let a = 5;
+const sum = (b) => (a + b); // Impure (influenced by outside values)
+```
+```javascript
+const doNothing = (a, b) => { // Pure (will always return same value given same arguments)
+  a + b;
+}
+```
+```javascript
+const printSum = (a, b) => console.log(a + b); // Impure (invokes a method that has side effects)
+```
+
+## Asymchronous programming ##
+Code can be run asynchronously in JS. This means when the engine encounters the code, it does not execute it fully until a later point in time (ms, secs, mins, etc..)
+
+```setTimeout```
+- `setTimeout` is one of the easiest ways to run code asynchronously
+- It accepts two arguments: a callback function to execute, and a number of milliseconds to delay the execution
+- The invocation of `setTimeout` is not delayed, only the execution of the callback passed to it
+
+### Callback passed to `setTimeout` ###
+- Only runs when JS is not doing executing any other synchronous code
+- Other callbacks passed to `setTimeout` will execute in order based on ms of delay
+- Code with a `0` ms delay will still not run until all synchronous code is done running
+```javascript
+const yodaSpeak = () => {
+  setTimeout(() => {
+    console.log('Greetings'); // 1
+  }, 1000);
+
+  setTimeout(() => {
+    console.log('my name is'); // 3
+  }, 3000)
+
+  setTimeout(() => {
+    console.log('Yoda'); // 2
+  }, 2000);
+}
+
+yodaSpeak();
+```
+
+### A note on asynchronous code and for loops ###
+- When using for loops, JS *treats* the counter as if a new one is re-declared on each iteration
+- This forms a new closure with the callback passed to the asynchronous function, and forms a new closure on each iteration
+- These closures give the asynchronous callback access to each incremental value of the for loop instead of only the final
+- This is special behavior exhibited in for loops to make things easier, as in theory, it would be impossible to increment a counter if we redeclared in on each iteration
+```javascript
+const delayLog = () => {
+  for (let sec = 1; sec <= 10; sec++) {
+    setTimeout(() => console.log(sec), sec * 1000); // logs 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+  }
+}
+```
+```javascript
+const delayLog = () => {
+for (var sec = 1; sec <= 10; sec++) {
+    setTimeout(() => console.log(sec), sec * 1000); // logs 11, 11, 11, 11, 11, 11, 11, 11, 11, 11
+  }
+}
+```
+```javascript
+const delayLog = () => {
+  let sec;
+  for (sec = 1; sec <= 10; sec++) {
+    setTimeout(() => console.log(sec), sec * 1000); // logs 11, 11, 11, 11, 11, 11, 11, 11, 11, 11
+  }
+}
+```
+### JS does some magic behind the scenes to make it work, probably something like: ###
+```javascript
+const delayLog = () => {
+  let sec;
+for (sec = 1; sec <= 10; sec++) {
+    ((sec) => (setTimeout(() => console.log(sec), delay * 1000)))(sec);
+  }
+}
+```
