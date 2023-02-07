@@ -640,3 +640,33 @@ for (sec = 1; sec <= 10; sec++) {
   }
 }
 ```
+## `setInterval` and `clearInterval` ##
+Similar to `setTimeout`, but instead allows you to execute a callback function at certain nterals of ms delays
+- Can use `clearInterval` to stop the `setInterval` execution of the callback passed to it
+- `setInterval` returns an ID that can be used by `clearInterval` to cancel its execution
+```javascript
+setInterval(() => {
+  console.log('stayin alive');
+}, 1000);
+```
+```javascript
+let stayingAlive = setInterval(() => {
+  console.log('stayin alive');
+}, 1000);
+
+clearInterval(stayingAlive); // Will clear the invocations of the callback by setInterval;
+```
+```javascript
+const countDelay = () => {
+  let count = 0;
+  return setInterval(() => {
+    count += 1;
+    console.log(count);
+  }, 1000)
+}
+
+let countID = countDelay(); // 1, 2, 3, 4, 5, 6, 7, 8, 9.....
+
+clearInterval(countID) // The above count will only execute if this line is not here
+                       // I cancelled it synchronously before it could run
+```
