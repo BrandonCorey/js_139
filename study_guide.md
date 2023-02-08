@@ -40,7 +40,6 @@ A mental model to describe how JS finds all declarations and stores references t
   - `function` declarations are initialized to their definition
   - If a variable/function of the same name is declared using `var` of `function` multiple times, all subseqeuent declarations are discared and are treated as reassignments during execution
   - If a `var` and `function` declaration share the same name, the function gets priority (is "hoisted), and the `declaration` is discareded, and its initilzation value will act as a reassignment during execution
-- In Node JS, since the entire program is wrapped in a function, the these declarations are still hoisted, even in the global scope.
 - Block scoped declarations like `let`, `const` and `class` also have their declarations hoisted (references to variables recorded in creation phase)
   - Function expressions and class declaration/expressions have their **names** hoisted (references to variables), but not their definitions
 ```javascript
