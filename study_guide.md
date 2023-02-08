@@ -5,6 +5,11 @@ The two phases the JS engine goes through to run our code
   - Also initalizes `var` declarations to `undefined` and `function` declarations to their function objects
 - Exeuction --> Interpreter executes our code, line by line
 
+## Scope ##
+- Declarative scope - Function vs Block
+- Visibility scope - global vs local
+- Lexical scope - Inner vs outer (relative)
+
 ## `var` statement ##
 `var` keyword can be used to declare variables. Variables declared with `var` are:
 - function scoped
