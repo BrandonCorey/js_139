@@ -222,19 +222,17 @@ The use of one function to apply some arguments to another function as to reduce
 
 Closure in below example:
 - Returned function closes over `callback` parameter in outer function, giving us access to the callback in the returned function even when `callback` is out of scope
-- Techinically the returned function also closes over `sortCopy` function, but this can also be explained by normal scoping rules
+- Returned function also closes over `sortCopy` function, allowing us to return its invocation from our inner function even when it is out of scope
 ```javascript
 // Example of PFA
-const sortCopy = (func, array) => {
-  return array.slice().sort(func);
-}
-
 const makeSorter = (callback) => {
+  const sortCopy = (func, array) => {
+    return array.slice().sort(func);
+  }
   return (array) => {
     return sortCopy(callback, array)
   }
 }
-
 const sortAsc = makeSorter((a, b) => a - b);
 sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
 ```
