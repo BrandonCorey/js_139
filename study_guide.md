@@ -1,3 +1,4 @@
+# JS topics #
 ## Creation Phase / Executuion Phase ##
 The two phases the JS engine goes through to run our code
 - Creation --> Stores references to all variables and notes their scope
@@ -670,3 +671,140 @@ let countID = countDelay(); // 1, 2, 3, 4, 5, 6, 7, 8, 9.....
 clearInterval(countID) // The above count will only execute if this line is not here
                        // I cancelled it synchronously before it could run
 ```
+# Testing #
+We write tests to prevent regression
+- Regression is an event that causes previously working code to not work anymore
+
+## Terminology ##
+- test - A specific situation or context that is being attempted to test
+  - Also called a **spec**
+- test suite - An entire set of tests the accompanies your program or app
+- assertion - A verification step that confirms that your program did what it should do
+  - Typically testing return values of functions/methods
+  - Also called **expectations**
+
+## Jest ##
+A testing library for javaScript
+- Has a `describe` function that takes a description of your tests and a callback for multiple test arguments
+- Has a `test` function that takes a descritino of the test and a callback to execute
+
+```javascript
+describe("Tests for our createBanana function", () => {
+  test('Our banana is yellow', () => {
+    let banana = new Banana('yellow');
+    expect(banana.color).toBe('yellow');
+  });
+});
+```
+
+### `expect` and matcher methods ###
+The expect keyword is used to create an assertion in conjunction with matcher metheods
+- `expect` takes an argument of the value to be tested
+  - This value is called the `actual` value
+- `expect` returns an object that has a variety of **matcher methods** that compare the actual value passed to expect to an **expected** value
+  - The **expected value** is the argument passed to the matcher
+### Most important matchers ###
+- `toBe` - Tests if the actual value is strictly equal to the expected value
+- `toEqual` - Tests if the actual value is strictly equal value for primitives, but compares the values objects contain instead of their references
+  - This allows us to test if an object has the values we expect
+```javascript
+describe("The banana class" () => {
+  let banana;
+  test('Our banana is yellow', () => {
+    banana = new Banana('yellow');
+    expect(banana.color).toBe('yellow');
+  });
+  test('Two newly created objects are equal', () => {
+    let banana2 = new Banana('yellow');
+    expect(banana2).toEqual(banana);
+  });
+});
+```
+### Other matchers ###
+- `toBeUndefined`, `toEqual`, `toThrow`, `toBeNull`, `toBeTruthy`, `toContain`
+- Can add modifier `not` to any of the above matchers to negate them e.g `expect(actualValue).not.toBeUndefined();`
+- N**ote:** Any actual value expected `toThrow` needs to be passed returned from a callback so it doesn't throw the error before `expect` can evaluate it
+```javascript
+describe("The banana class" () => {
+  test('banana color is assigned, () => {
+    let banana = new Banana('yellow');
+    expect(banana.color).not.toBeUndefined();
+  });
+```
+```javascript
+describe("The banana class" () => {
+  test('banana color is assigned, () => {
+    expect(() => new Banana('yellow', 'green')).toThrow();
+  });
+```
+## SEAT approach ##
+- **S**et up the necessary objects
+- **E**xecute the code against the items we are testing
+- **A**ssert the results of execution
+- **T**ear down and clean up any lingering artifacts
+
+### Setup ###
+We can use the jest function `beforeEach` to set up necessary objects/values before our tests
+- `beforeEach` takes a single callback argument
+- `beforeEach` is invoked outside the body of our tests
+  - This means any variables used in `beforeEach`s callback must be declared outside `beforeEach` so that they are in scope for the other tests
+- The callback passed to `beforeEach` is executed before every individual test (which is good as it will prevent us from mutating objects)
+
+```javascript
+describe('The banana class', () => {
+  beforeEach(() => {
+    let banana = new Banana('yellow');
+    let otherBanana = new Banana('green');
+  });
+  test('Our banana is yellow', () => {
+    expect(banana.color).toBe('yellow');
+  });
+  test('Bananas have different colors', () => {
+    expect(banana).not.toEqual(otherBanana);
+  });
+});
+```
+
+## Execution ##
+This is the code we run to produce the actual value we would like to test
+- This can also be included in the setup phase as well
+- I am not including a code example because there are many above
+
+## Assertion ##
+This is the actual value passed to the `expect` function being compared to the `expected` value passed to the method method
+- All assertions in `jest` begin using the `expect` keyword
+- Once again, there are many example above of this
+
+## Tear Down ##
+There is a function called `afterEach` that can be used for teardown
+- Similar to `beforeEach`, after each is used to execute after every single test
+- We don't really go over this in the curriculum too much
+
+```javascript
+describe('The banana class', () => {
+  beforeEach(() => {
+    let banana = new Banana('yellow');
+    let otherBanana = new Banana('green');
+  });
+  
+  afterEach(() => console.log('test complete');
+  
+  test('Our banana is yellow', () => {
+    expect(banana.color).toBe('yellow');
+  });
+  test('Bananas have different colors', () => {
+    expect(banana).not.toEqual(otherBanana);
+  });
+});
+```
+
+## Code coverage ##
+Testing libraries usually determine coverage one of two ways
+- # of functions called by our tests / total functions in our program --> as a percentage
+- # of lines executed by our tests / total lines in our program --> as a percentage
+
+### Important things to remember ###
+- This does not tell us whether the code is working correctly or not
+  - Only tells us how if they it is working with the our test cases
+
+jest has a built in coverage tool --> `jest --coverage <test program name>`
