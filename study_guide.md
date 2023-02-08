@@ -1,7 +1,7 @@
 # JS topics #
 ## Creation Phase / Executuion Phase ##
 The two phases the JS engine goes through to run our code
-- Creation --> Stores references to all variables and notes their scope
+- Creation --> Stores references to all variables and reecords their scope
   - Also initalizes `var` declarations to `undefined` and `function` declarations to their function objects
 - Exeuction --> Interpreter executes our code, line by line
 
