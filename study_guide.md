@@ -214,9 +214,9 @@ countByFive(); // 15
 countByFiveAgain(); // 20
 ```
 ### Partial Function application ###
-The use of one function to apply some arguments to another function as to reduce the total number of arguments required to pass to the second function
+The use of one function to apply some arguments to a function invocation using closure to reduce the number of arguments required to invoke it
 - This allows us to pass functions as arguments to other functions that may want to call our function with less arguments than our function takes
-- We can use PFA to pass a function that has some of its arguments already applied
+- We do this by returning a function that invokes the partially applied function
 - **It is not PFA** if the total number of arguments is not reduced in the returned function
 - **It is not PFA** if we hard-bind the first argument of the returned function instead of using closure
 
@@ -233,11 +233,12 @@ const makeSorter = (callback) => {
     return sortCopy(callback, array)
   }
 }
+
 const sortAsc = makeSorter((a, b) => a - b);
 sortAsc([6, 3, 7, 2]); // [ 2, 3, 6, 7 ]
 ```
 ### Private Data ###
-Private Data is data that is impossible to access from outside the scope where the data is defined
+Private Data is data that is inaccessible from outside the scope where the data is defined
 - Closures allow us to store private data that cannot be accessed  outside of the function that created the closure
 - Private data is desirable as it forces users to use the methods we provide to interract with that data instead of interracting with it directly
   - This helps with data integrity
