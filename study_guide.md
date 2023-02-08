@@ -800,8 +800,8 @@ describe('The banana class', () => {
 
 ## Code coverage ##
 Testing libraries usually determine coverage one of two ways
-- # of functions called by our tests / total functions in our program --> as a percentage
-- # of lines executed by our tests / total lines in our program --> as a percentage
+- number of functions called by our tests / total functions in our program --> as a percentage
+- number of lines executed by our tests / total lines in our program --> as a percentage
 
 ### Important things to remember ###
 - This does not tell us whether the code is working correctly or not
