@@ -817,10 +817,13 @@ jest has a built in coverage tool --> `jest --coverage <test program name>`
 ## Node Pojects ##
 Should always create a new local directory, new github repository, and new Git repository for projects
 - Make sure that all directories and parent directory names **do not have spaces**
+- Make sure parent directories do not have `node_modules` directory (except maybe at the global level)
 
 ### Necessary files/directories for now ###
 - `test` directory for storing all of our test files
 - `lib` directory for storing our source code
+- `dist` directory for transpiled code
+- `index.js` main file referenced in our `package.json` that imports the relevant modules (in this case, our transpiled code modules)
 - `.gitignore` file containing the text `node_modules` (this file is hidden)
 - `README.md` containg whatever text we want to describe project
 
@@ -828,6 +831,10 @@ Example:
 ```
 todolist_project
 ├── README.md
+├── index.js
+├── dist
+│   ├── todo.js
+│   └── todolist.js
 ├── lib
 │   ├── todo.js
 │   └── todolist.js
@@ -849,11 +856,11 @@ The `npm` command is used to manage packages
 - `jest` (command line)
 - `readline-sync` (imported into program)
 
-Things like `readline` are programming interfaces, it is a module that we require and allows us to use its methods/functions
-
-Things like `jest` and `eslnt` are command line executables
-
-NOTE: When using `require` for node modules, we do not need to specify the relative path. Node will always look through your `node_modules` directory
+### npm vs npx ###
+- Things like `readline` are programming interfaces, it is a module that we require and allows us to use its methods/functions
+- Things like `jest` and `eslnt` are command line executables
+  - `npx` is used to run local executables, global ones do not require the `npx` prefix
+- NOTE: When using `require` for node modules, we do not need to specify the relative path. Node will always look through your `node_modules` directory
 
 ### Local vs Global Packages ###
 Local packages are installed to your project directory
@@ -863,12 +870,9 @@ Local packages are installed to your project directory
 Packages should almost always be installed locally so you/npm can install the correct version of the package for your project
 - A version installed globally may be compatible with one project, but not another
 
-Some packages don't typically require different versions for different projects and be installed globally
+Some packages don't usually require different versions for different projects and be installed globally
 - Examples of this are `jest` and `heroku`
 - These can be installed using the global flag `npm install heroku -g` or `npm install jest -g`
-  - NOTE: You may need root privelages to install a global package i.e (`sudo npm install jest -g`)
-- To uninstall all global packages, use `rm -fr node_mudles package.json package-lock.json`
-  - global packages for Ubuntu are stored in `/usr/local/lib/node_modudles`
 
 ```javascript
 const _ = require('lodash'); // lodash library is an object with methods
@@ -882,13 +886,13 @@ console.log(_.chunk([1, 2, 3, 4, 5, 6, 7, 8], 2));
 console.log(chunk([1, 2, 3, 4, 5, 6, 7, 8], 2));
 ```
 
-### `package.json` and `package-lock.json` ###
+## `package.json` and `package-lock.json` ##
 The `package.json` file contains important information about your Node project, including all of your projects dependncies
 - A `package.json` can be created using `npm init`
 
 ### `package.json` ###
 While Node will add a `package.json` automatically when you install a package, it can also be created manually
-- You can manually add a `dependencies` key with the relevent information of the module you want to install
+- You can manually add a `dependencies` key to the JSON with the relevent information of the module you want to install
 - After you add your `dependencies`, you can use `npm install` to find the version you specified and install it into `node_modules`
 - Can also do it automatically using `npm install <packagename> --save`
   - `--save` flag tells npm to save the package to the `dependencies` list in `package.json`. Can also use `-S` flag
@@ -896,15 +900,15 @@ While Node will add a `package.json` automatically when you install a package, i
 Some packages may only be relevant in the context of a development enviroment, and not suitable for production (e.g `eslint`)
 - There is a section within a `package.json` for these dependecies as well called `devDependencies`
 - Can manually add this to a `package.json` or use `npm install <packagename> --save-dev`
-- 
+
 ### `package-lock.json` ###
-Installing modules will create a `package-lock.json`, which will contain specific info about which minor version and patch of which version your project is using
-- IMPORTANT: If you make ANY changes to `package.json` "dependencies", you MUST update `package-locl.json` using `npm intall`
-- The `package-lock.json` will also show all the dependencies that your dependency has
-- NOTE: Verson is considered the major number that we specify in our `package.json`, but Node will determine the minor version and patch for us
-- Ex) Version 4.17.1 --> Major version: 4, Minor version: 17, Patch version: 1
+Installing modules will create a `package-lock.json`, which will contain specific info about which major, minor, and patch version of a depency your project is using
+- IMPORTANT: If you make ANY changes to `package.json` dependencies, you MUST update `package-lock.json` using `npm intall`
+- The `package-lock.json` will also show all the dependencies that your project has
+  - NOTE: Verson is considered the major number that we specify in our `package.json`, but Node will determine the minor version and patch for us
+  - Ex) Version 4.17.1 --> Major version: 4, Minor version: 17, Patch version: 1
 - The `package-lock.json` file is important as the next time `npm install` is ran, it will install the exact depencies needed, down to patch number
-- This is incredibly helpful if a team of developers are working on something
+- This is incredibly helpful if a team of developers are working on something as it makes it possible to be using the exact same versions for each dependency
 
 ```json
 // package.json example
@@ -969,10 +973,10 @@ Finally, to **transpile our ES6+ to ES5**:
 - This will transpile all of our js files in the `lib` directory of our current directory
 - It will output files of the same name to a `dist` directory
 
-## NPM scripts ##
+## npm scripts ##
 We can add scripts to our `package.json` within the "scripts" object
 
-### Babel script ###
+### Example of adding Babel script ###
 The syntax to run a script is `npm run <scriptname>`
 
 Lets make using babel easier:
@@ -1024,6 +1028,7 @@ We can add `npx babel lib --out-dir dist --presets=@babel/preset-env` to the scr
 Make sure `package.json` contains correct information
 - Remove any dependencies that you are not using from the file
 - After they are removed, use `npm prune` to remove them from your `node_modules`
+- After that, use `npm install` to update your `package-lock.json`
 
 **The three main things that need to be filled out in `package.json`**
 - Change `name` of package if needed
