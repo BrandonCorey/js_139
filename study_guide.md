@@ -517,11 +517,13 @@ We can use the `try` and `catch` statements to resolve excpetions that are raise
   - If it finds one, the code in the catch block will be executed
   - IF the catch throw an error, the process will repeat
 ```javascript
+class LoadError extends Error {};
+
 const loadFile = (filePath) => /*code here*/; 
 try {
   loadFile('./testFile');
 } catch (error) {
-  if (error instanceof loadFile) {
+  if (error instanceof loadError) {
     console.log('Could not load file');
   } else {
     throw error;
