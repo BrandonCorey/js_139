@@ -44,7 +44,7 @@ console.log(account); // { email: 'fakeEmail@fake.com', password: 'newPassword' 
 ## Private Data ##
 One solution is to take advantage of closure in conjunction with the object factory. We can return an object who's methods "close over" variables (in this case, parameters) within the outer factory function, allowing us to access the variables through the closure instead of as properties on the object. This allows us to store private data that can only be accessed through the closure formed between our methods and the data, forcing users of the interface to abide by the requirements we set in place for each interraction. Our methods will form a closure that contains references to the `email` and `password` parameters, allowing us access to this private data strictly through these methods.
 
-In the example below, none of the private data can be modified _or_ viewed unless a correct password is provided to the method.
+In the example below, none of the private data can be modified _or_ viewed unless a correct password is provided to the method, which enforces a level of data integrity that is superior to our previous example.
 ```javascript
 function createAccount(email, password) {
   return {
