@@ -43,37 +43,34 @@ One solution here is to take advantage of closure in conjunction with an IIFE. W
 
 In the below example, none of the private data can be modified _or_ viewed unless a correct password is provided to the method.
 ```javascript
-const Account = (() => {
-  let userPassword;
-  let userEmail;
-
-  return class {
-    constructor(email, password) {
-      userPassword = password;
-      userEmail = email;
-    }
-  
+function createAccount(email, password) {
+  return {
     resetPassword(currentPass, newPass) {
-      if (userPassword === currentPass) userPassword = newPass;
-      else console.log('Could not update password! (Incorrect password)');
-    }
+      if (password === currentPass) password = newPass;
+      else {
+        console.log('Could not update password! (Incorrect password)');
+      }
+    },
 
     updateEmail(currentPass, newEmail) {
-      if (userPassword === currentPass) userEmail = newEmail;
-      else console.log('Could not udpate email! (Incorrect password)');
-    }
-
-    printInfo(password) {
-      if (userPassword === password) {
-        console.log(`email: ${userEmail}\npassword: ${userPassword}`);
+      if (password === currentPass) email = newEmail;
+      else {
+        console.log('Could not update email! (Incorrect password)');
       }
-      else console.log('Could not display account info! (Incorrect password)')
-    }
-  }
-})();
+    },
 
-let account = new Account('bcorey3660@gmail.com', 'testPassword');
-console.log(account) // {}
+    printInfo(passInput) {
+      if (password === passInput) {
+        console.log(`email: ${email}\npassword: ${password}`);
+      } else {
+        console.log('Could not display account info! (Incorrect password)');
+      }
+    }
+  };
+}
+
+let account = createAccount('bcorey3660@gmail.com', 'testPassword');
+console.log(account) // { ...[Functions] }
 account.printInfo('wrongPass') // Could not display account info! (Incorrect password)
 account.resetPassword('testPassword', 'updatedPassword');
 account.updateEmail('updatedPassword', 'newEmail@new.com');
