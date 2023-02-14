@@ -1,6 +1,6 @@
 # Private and non-Private data #
 ### Non-Private data ###
-In the code snippet below, we use a `createAccount` factory to create objects with instance properties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values, as well as a method to display their current values, given that the correct password is passed to each method. In this situation however, none of the properties are private, and this is an issue. The properties are not private because all of them are accessible by using simple dot or bracket notation. In this situation, private data would not be accessible outside of the object.
+In the code snippet below, we use a `createAccount` factory to create objects with the instance properties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values, and a method to display their current values (given that the correct password is passed to each method). In this situation however, none of the properties are private, and this is an issue. The properties are not private because all of them are accessible by using simple dot or bracket notation. In this situation, private data would not be accessible outside of the object.
 
 While it makes sense to expose `resetPassword`, `updateEmail` and `printInfo` as part of our public interface given the nature of these functions, it makes little sense to allow direct access to the instance properties `email` and `password`. As can be seen below, we can completely bypass the requirement of a correct password to update the values by accessing the properites directly on an object. This defeats the purpose providing an interface to do so, as we are not limiting the user to the requirements we set in place. It also allows us to view `email` and `password` with a simple `console.log` as the properties are stored directly on the object, which defeats the purpose of the password requirement of `printInfo`.
 
@@ -78,6 +78,13 @@ account.updateEmail('updatedPassword', 'newEmail@new.com');
 account.printInfo('updatedPassword'); // email: newEmail@new.com password: updatedPassword
 ```
 # Privacy and Integrity in Node modules #
+
+Below, we have a few simple modules based around a report card. I have arranged these modules in a way to only expose data that is necessary, while making sure that that the exposed data does not allow unintended maniuplation of data meant to be private.
+
+### main.js ###
+This module imports four functions from two modules. We have an `addGrade` function that lets us add a grade to our report gard, a `removeGrade` that removes the most recent grade we added, a `bestGrade` that returns our highest grade on the report card, and a `worstGrade` function that returns the lowest grade.
+
+The report card does not live in this file, so the only way to manipulate it is using the `addGrade` and `removeGrade` functions. 
 ```javascript
 // main.js
 const { addGrade, removeGrade } = require('./report_card.js');
@@ -92,12 +99,14 @@ removeGrade();
 console.log(bestGrade()); // 97
 console.log(worstGrade()); // 88
 ```
+### report_card.js ###
+This module contains our report card, which is just a simple array. We also have our `addGrade` and `removeGrade` functions. These allow us to operate directly on our `reportCard` array. Finally, we have a `getGrades` function, which returns a shallow copy of our `reportCard` array and that will allow us to expose the grade elements in a safe way. Because we are only adding numbers to the array, a shallow copy should be sufficient in protecting the integrity of our data. If we were adding objects to the array, we would need to take more rigorous precautions as the elements could be referenced. We are storing these functions and `reportCard` in the same module to maintain a level of encapsulation. We want to keep the functions that operate on our data and the data itself within a single entity (in this case, a module).
 ```javascript
 // report_card.js
 const reportCard = [];
 
 const addGrade = (grade) => {
-  reportCard.push(grade);
+  if (typeof grade === 'number') reportCard.push(grade);
 }
 
 const removeGrade = () => {
@@ -108,6 +117,8 @@ const getGrades = () => [...reportCard];
 
 module.exports = { addGrade, removeGrade, getGrades };
 ```
+### grade_calculations.js ###
+This module imports the function `getGrades` to give us access to a copy of the `reportCard` array. I structured these functions in a way to show why keeping `reportCard` private was important. This module exports two functions, `bestGrade` and `worstGrade`. Both of these functions invoke `sortDesc`, which sorts our grades in descending order. This allows each other function to reference either the first or last element of the array as needed. However, `sortDesc` uses the Array prototype `sort` method, which mutates the caller. This isn't an issue because we use `getGrades` to access of a copy of `reportCard`, but if we hadn't, this would have been trouble. `removeGrade` in the main module, if called after `bestGrade` or `worstGrad`, may have ended up removing the lowest grade each time instead of the most recent addition. The reason these functions are in a seperate module is because they are not supposed to access `reportCard` directly, as mutations
 ```javascript
 // grade_calculations.js
 const { getGrades } = require('./report_card.js');
