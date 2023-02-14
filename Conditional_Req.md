@@ -1,4 +1,4 @@
-### Non-Private-data ###
+### Non-Private data ###
 In the code snippet below, we use an `Account` class to create objects with instance proerties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values as well as display their current values, given that the correct password is passed to each method. In this situation, none of our properties are private, and that is an issue. While it makes sense to expose `resetPassword`, `updateEmail` and `printInfo` as part of our public interface given the nature of these functions, it makes little sense to allow direct access to the instance properties `email` and `password`.
 
 As can be seen below, we can completely bypass the requirement of a correct password to update the values by accessing the properites directly on the instance. This defeats the purpose providing an interface to do so, as we are not limiting the user to the requirements we set in place. It also allows us to view `email` and `password` with a simple `console.log` as the properties are stored directly on the instance, which defeats the purpose of the password requirement of `printInfo`.
