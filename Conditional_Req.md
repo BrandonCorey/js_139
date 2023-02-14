@@ -82,7 +82,7 @@ account.printInfo('updatedPassword'); // email: newEmail@new.com password: updat
 Below, we have a few simple modules based around a report card. I have arranged these modules in a way to only expose data that is necessary, while making sure that that the exposed data does not allow unintended maniuplation of data meant to be private.
 
 ## main.js ##
-This module imports four functions from two modules. We have an `addGrade` function that lets us add a grade to our report gard, a `removeGrade` that removes the most recent grade we added, a `bestGrade` that returns our highest grade on the report card, and a `worstGrade` function that returns the lowest grade.
+This module imports four functions from two different modules. We have an `addGrade` function that lets us add a grade to our report gard, a `removeGrade` that removes the most recent grade we added, a `bestGrade` that returns our highest grade on the report card, and a `worstGrade` function that returns the lowest grade.
 
 The report card does not live in this file, and the only way to manipulate it is using the `addGrade` and `removeGrade` functions. This provides us an interface that must be used to operate on the report card. We also have functions that must be used to provide us data about the highest and lowest grades within the report card.
 
