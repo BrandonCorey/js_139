@@ -46,6 +46,7 @@ One solution is to take advantage of closure in conjunction with the object fact
 
 In the example below, none of the private data can be modified _or_ viewed unless a correct password is provided to the method, which enforces a level of data integrity that is superior to our previous example.
 ```javascript
+// Private email and password using closure
 function createAccount(email, password) {
   return {
     resetPassword(currentPass, newPass) {
