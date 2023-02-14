@@ -1,8 +1,10 @@
 # Pivacy and Data integrity in JS #
-## Non-Private data ##
-In the code snippet below, we use a factory named `createAccount` to create objects with the instance properties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values, and a method to display their current values (given that the correct password is passed to each method). In this situation however, none of the properties are private, and this is an issue. The properties are not considered private because all of them are accessible by using simple dot or bracket notation. In this situation, private data would not be accessible outside of the object.
+Private data in JavaScript is important as it allows us to restrict developers into using a provided interface to access the data. This allows us to control how the data is interracted with, which helps with data integrity. If a developer _must_ use a certain set of functions or methods to access data, there is less worry about unintended behavior that could result in accidental or malicious manipulation of the data being accessed. Luckily, there are a few techniques that can be leveraged to create private data in JavaScript, primarily with the use of _closure_, as well as _modules_.
 
-While it makes sense to expose `resetPassword`, `updateEmail` and `printInfo` as part of our public interface given the nature of these functions, it makes little sense to allow direct access to the instance properties `email` and `password`. As can be seen below, we can completely bypass the requirement of a correct password to update the values by accessing the properites directly on an object. This defeats the purpose providing an interface to do so, as we are not limiting the user to the requirements we set in place. It also allows us to view `email` and `password` with a simple `console.log` as the properties are stored directly on the object, which defeats the purpose of the password requirement of `printInfo`.
+## Non-Private data ##
+In the code snippet below, we use a factory named `createAccount` to create objects with the instance properties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values, and a method to display their current values (if given the correct password). In this situation however, none of the properties are private, and this can an issue. The properties are not considered private because all of them are accessible by using simple dot or bracket notation. In this situation, private data would not be accessible outside of the object.
+
+While it makes sense to expose `resetPassword`, `updateEmail` and `printInfo` as part of our public interface given the nature of these functions, it makes less sense to allow direct access of the properties `email` and `password`. As can be seen below, we can completely bypass the requirement of a correct password to update the values by accessing the properites directly on the object. This defeats the purpose providing an interface to do so, as we are not limiting the user to the requirements we set in place. This is detrimental to the integrity of our data. It also allows us to view `email` and `password` with a simple `console.log` as the properties are stored directly on the object, which defeats the purpose of the password requirement of `printInfo`.
 
 ```javascript
 // Non-private data
@@ -40,9 +42,9 @@ account.email = 'fakeEmail@fake.com'; // Bypasses updateEmail
 console.log(account); // { email: 'fakeEmail@fake.com', password: 'newPassword' ... [Functions]} // Bypases printInfo
 ```
 ## Private Data ##
-One solution here is to take advantage of closure in conjunction with the object factory. We can return an object who's methods "close over" variables (in this case, parameters) within our outer function, allowing us to access the variables through the closure instead of as properties on an instance. This allows us to store private data that can only be accessed through the closure formed between our methods and the data, forcing users of the interface to abide by the requirements we set in place for each interraction, instead of letting them bypass it, as was possible in our previous code. We will have our methods form a closure that references the `email` and `password` parameters.
+One solution here is to take advantage of closure in conjunction with the object factory. We can return an object who's methods "close over" variables (in this case, parameters) within our outer function, allowing us to access the variables through the closure instead of as properties on an instance. This allows us to store private data that can only be accessed through the closure formed between our methods and the data, forcing users of the interface to abide by the requirements we set in place for each interraction, instead of letting them bypass it as we saw in the previous code. We will have our methods form a closure that references the `email` and `password` parameters.
 
-In the below example, none of the private data can be modified _or_ viewed unless a correct password is provided to the method.
+In the example below, none of the private data can be modified _or_ viewed unless a correct password is provided to the method.
 ```javascript
 function createAccount(email, password) {
   return {
@@ -134,8 +136,8 @@ const bestGrade = () => {
 }
 
 const worstGrade = () => {
-  let grades = getGrades();
-  return sortDesc()[grades.length - 1];
+  let sorted = sortDesc();
+  return sorted[sorted.length - 1];
 }
 
 module.exports = { bestGrade, worstGrade }
