@@ -103,7 +103,9 @@ console.log(bestGrade()); // 97
 console.log(worstGrade()); // 88
 ```
 ## report_card.js ##
-This module contains our report card, which is just a simple array. We also have our `addGrade` and `removeGrade` functions. These allow us to operate directly on our `reportCard` array. Finally, we have a `getGrades` function, which returns a shallow copy of our `reportCard` array, and allows us to expose an array of grades in a safe way. Because we are only adding numbers to the array, a shallow copy should be sufficient in protecting the integrity of our data. If we were adding objects to the array, we would need to take more rigorous precautions as the elements themselves could be referenced. We are storing these functions and `reportCard` in the same module to maintain a level of encapsulation. We want to keep the functions that operate on the data and the data itself within a single entity (in this case, a module). We also want to make sure to keep `reportCard` private to this module, as the functions in this module contain the only operations we wish to perform directly on the array.
+This module contains our report card, which is just a simple array. We also have our `addGrade` and `removeGrade` functions. These allow us to operate directly on our `reportCard` array. Finally, we have a `getGrades` function, which returns a shallow copy of our `reportCard` array, and allows us to expose an array of grades in a safe way. Because we are only adding numbers to the array, a shallow copy should be sufficient in protecting the integrity of our data. If we were adding objects to the array, we would need to take more rigorous precautions as the elements themselves could be referenced.
+
+We are storing these functions and `reportCard` in the same module to maintain a level of encapsulation. We want to keep the functions that operate on the data and the data itself within a single entity (in this case, a module). We also want to make sure to keep `reportCard` private to this module, as the functions in this module contain the only operations we wish to perform directly on the array.
 ```javascript
 // report_card.js
 const reportCard = [];
