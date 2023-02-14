@@ -78,6 +78,8 @@ account.printInfo('wrongPass') // Could not display account info! (Incorrect pas
 account.resetPassword('testPassword', 'updatedPassword');
 account.updateEmail('updatedPassword', 'newEmail@new.com');
 account.printInfo('updatedPassword'); // email: newEmail@new.com password: updatedPassword
+account.password = 'blah';
+account.printInfo('blah'); // Could not display account info! (Incorrect password)
 ```
 # Privacy and Integrity in Node modules #
 
