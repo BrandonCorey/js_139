@@ -1,4 +1,4 @@
-# Private and non-Private data #
+# Pivacy and Data integrity in JS #
 ## Non-Private data ##
 In the code snippet below, we use a factory named `createAccount` to create objects with the instance properties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values, and a method to display their current values (given that the correct password is passed to each method). In this situation however, none of the properties are private, and this is an issue. The properties are not considered private because all of them are accessible by using simple dot or bracket notation. In this situation, private data would not be accessible outside of the object.
 
