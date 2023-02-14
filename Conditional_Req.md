@@ -5,30 +5,30 @@ While it makes sense to expose `resetPassword`, `updateEmail` and `printInfo` as
 
 ```javascript
 // Non-private data
-class Account {
-  constructor(email, password) {
-    this.email = email;
-    this.password = password;
-  }
+function createAccount(email, password) {
+  return {
+    email,
+    password,
 
-  resetPassword(currentPass, newPass) {
-    if (this.password === currentPass) this.password = newPass;
-    else console.log('Could not update password! (Incorrect password)');
-  }
+    resetPassword(currentPass, newPass) {
+      if (this.password === currentPass) this.password = newPass;
+      else console.log('Could not update password! (Incorrect password)');
+    },
 
-  updateEmail(currentPass, newEmail) {
-    if (this.password === currentPass) this.email = newEmail;
-    else console.log('Could not udpate email! (Incorrect password)');
-  }
+    updateEmail(currentPass, newEmail) {
+      if (this.password === currentPass) this.email = newEmail;
+      else console.log('Could not udpate email! (Incorrect password)');
+    },
 
-  printInfo(password) {
-    if (this.password === password) {
-      console.log(`email: ${this.email}\npassword: ${this.password}`);
-    } else console.log('Could not display account info! (Incorrect password)');
+    printInfo(password) {
+      if (this.password === password) {
+        console.log(`email: ${this.email}\npassword: ${this.password}`);
+      } else console.log('Could not display account info! (Incorrect password)');
+    }
   }
 }
 
-let account = new Account('bcorey3660@gmail.com', 'testPassword');
+let account = new createAccount('bcorey3660@gmail.com', 'testPassword');
 
 account.printInfo('wrongpass'); // Could not display account info! (Incorrect password)
 account.resetPassword('wrongPass', 'newPass'); // Could not update password! (Incorrect password)
@@ -36,7 +36,7 @@ account.updateEmail('wrongPass', 'newEmail'); // Could not udpate email! (Incorr
 
 account.password = 'fakePassword'; // Bypasses resetPassword
 account.email = 'fakeEmail@fake.com'; // Bypasses updateEmail
-console.log(account); // { email: 'fakeEmail@fake.com', password: 'newPassword' } // Bypases printInfo
+console.log(account); // { email: 'fakeEmail@fake.com', password: 'newPassword' ... [Functions]} // Bypases printInfo
 ```
 ### Private Data ###
 One solution here is to take advantage of closure in conjunction with an IIFE. We can use the IIFE to return a class who's methods "close over" variables within our outer function, allowing us to access the variables through the closure instead of as properties on an instance. This allows us to store private data that can only be accessed through the closure formed between our instance methods and the data, forcing users of the interface to abide by the requirements we set in place for each interraction, instead of letting them bypass it, as was possible in our previous code.
