@@ -1,3 +1,4 @@
+# Private and non-Private data #
 ### Non-Private data ###
 In the code snippet below, we use an `createAccount` factory to create objects with instance properties `email` and `password`. We also provide instance methods that allow us to reassign these properties to different values, as well as a method to display their current values, given that the correct password is passed to each method. In this situation however, none of the properties are private, and this is an issue. The properties are not private because all of them are accessible by using simple dot or bracket notation. In this situation, private data would not be accessible outside of the object.
 
@@ -75,4 +76,55 @@ account.printInfo('wrongPass') // Could not display account info! (Incorrect pas
 account.resetPassword('testPassword', 'updatedPassword');
 account.updateEmail('updatedPassword', 'newEmail@new.com');
 account.printInfo('updatedPassword'); // email: newEmail@new.com password: updatedPassword
+```
+# Privacy and Integrity in Node modules #
+```javascript
+// main.js
+const { addGrade, removeGrade } = require('./report_card.js');
+const { bestGrade, worstGrade } = require('./grade_calculations.js');
+
+addGrade(88);
+addGrade(97);
+addGrade(86);
+
+removeGrade();
+
+console.log(bestGrade()); // 97
+console.log(worstGrade()); // 88
+```
+```javascript
+// report_card.js
+const reportCard = [];
+
+const addGrade = (grade) => {
+  reportCard.push(grade);
+}
+
+const removeGrade = () => {
+  reportCard.pop();
+}
+
+const getGrades = () => [...reportCard];
+
+module.exports = { addGrade, removeGrade, getGrades };
+```
+```javascript
+// grade_calculations.js
+const { getGrades } = require('./report_card.js');
+
+const sortDesc = () => {
+  let grades = getGrades();
+  return grades.sort((a, b) => b - a);
+}
+
+const bestGrade = () => {
+  return sortDesc()[0];
+}
+
+const worstGrade = () => {
+  let grades = getGrades();
+  return sortDesc()[grades.length - 1];
+}
+
+module.exports = { bestGrade, worstGrade }
 ```
