@@ -84,7 +84,8 @@ Below, we have a few simple modules based around a report card. I have arranged 
 ### main.js ###
 This module imports four functions from two modules. We have an `addGrade` function that lets us add a grade to our report gard, a `removeGrade` that removes the most recent grade we added, a `bestGrade` that returns our highest grade on the report card, and a `worstGrade` function that returns the lowest grade.
 
-The report card does not live in this file, so the only way to manipulate it is using the `addGrade` and `removeGrade` functions. 
+The report card does not live in this file, and the only way to manipulate it is using the `addGrade` and `removeGrade` functions. This provides us an interface that must be used to operate on the report card. We also have functions that must be used to provide us data about the highest and lowest grades within the report card.
+
 ```javascript
 // main.js
 const { addGrade, removeGrade } = require('./report_card.js');
@@ -100,7 +101,7 @@ console.log(bestGrade()); // 97
 console.log(worstGrade()); // 88
 ```
 ### report_card.js ###
-This module contains our report card, which is just a simple array. We also have our `addGrade` and `removeGrade` functions. These allow us to operate directly on our `reportCard` array. Finally, we have a `getGrades` function, which returns a shallow copy of our `reportCard` array and that will allow us to expose the grade elements in a safe way. Because we are only adding numbers to the array, a shallow copy should be sufficient in protecting the integrity of our data. If we were adding objects to the array, we would need to take more rigorous precautions as the elements could be referenced. We are storing these functions and `reportCard` in the same module to maintain a level of encapsulation. We want to keep the functions that operate on our data and the data itself within a single entity (in this case, a module).
+This module contains our report card, which is just a simple array. We also have our `addGrade` and `removeGrade` functions. These allow us to operate directly on our `reportCard` array. Finally, we have a `getGrades` function, which returns a shallow copy of our `reportCard` array, and allows us to expose the grade elements in a safe way. Because we are only adding numbers to the array, a shallow copy should be sufficient in protecting the integrity of our data. If we were adding objects to the array, we would need to take more rigorous precautions as the elements themselves could be referenced. We are storing these functions and `reportCard` in the same module to maintain a level of encapsulation. We want to keep the functions that operate on our data and the data itself within a single entity (in this case, a module). We also want to make sure we keep `reportCard` private to this module, as these ar the only operations we wish to perform directly on the array.
 ```javascript
 // report_card.js
 const reportCard = [];
@@ -118,7 +119,7 @@ const getGrades = () => [...reportCard];
 module.exports = { addGrade, removeGrade, getGrades };
 ```
 ### grade_calculations.js ###
-This module imports the function `getGrades` to give us access to a copy of the `reportCard` array. I structured these functions in a way to show why keeping `reportCard` private was important. This module exports two functions, `bestGrade` and `worstGrade`. Both of these functions invoke `sortDesc`, which sorts our grades in descending order. This allows each other function to reference either the first or last element of the array as needed. However, `sortDesc` uses the Array prototype `sort` method, which mutates the caller. This mutation isn't an issue because we use `getGrades` to access of a copy of `reportCard`, but if we hadn't, this would have been trouble. `removeGrade` in the main module, if called after `bestGrade` or `worstGrade`, may have ended up removing the lowest grade each time instead of the most recent addition. To maintain the integrity of the data, these functions were put in a seperate module as they are not intended to operate on `reportCard` directly. 
+This module imports the function `getGrades` to give us access to a copy of the `reportCard` array. I structured these functions in a way to show why keeping `reportCard` private was important. This module exports two functions, `bestGrade` and `worstGrade` so that they can be used in the main module. Both of these functions invoke `sortDesc`, which sorts our grades in descending order. This allows the other functions to reference either the first or last element of the array as needed. Note that `sortDesc` uses the Array prototype `sort` method, which mutates the caller. This mutation isn't an issue because we use `getGrades` to access of a copy of `reportCard`, but if we hadn't, this would have been trouble. `removeGrade` in the main module, if called after `bestGrade` or `worstGrade`, may have ended up removing the lowest grade instead of the most recent addition. To maintain the integrity of the data, these functions were put in a seperate module as they are not intended to operate on `reportCard` directly. 
 ```javascript
 // grade_calculations.js
 const { getGrades } = require('./report_card.js');
